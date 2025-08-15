@@ -1,0 +1,230 @@
+body {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: #f4f4f4;
+  color: #222;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 40px 20px;
+  transition: background 0.3s, color 0.3s;
+}
+
+.container {
+  background: #ffffff;
+  padding: 20px 25px;
+  border-radius: 12px;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+  max-width: 600px;
+  min-height: 500px;
+  width: 100%;
+  transition: background 0.3s;
+}
+
+header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 12px;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 20px;
+}
+
+header h1 {
+  font-size: 22px;
+  margin: 0;
+  color: #333;
+  font-weight: 600;
+}
+
+header h1 i {
+  margin-right: 8px;
+  color: #555;
+}
+.top-bar {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+button {
+  padding: 9px 14px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.25s, transform 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+button:active {
+  transform: scale(0.96);
+}
+
+#add-btn {
+  background: #e0e0e0;
+  color: #222;
+}
+
+#add-btn:hover {
+  background: #d5d5d5;
+}
+
+#dark-mode-toggle {
+  background: #ccc;
+  color: #222;
+}
+
+#dark-mode-toggle:hover {
+  background: #bdbdbd;
+}
+
+.filters {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 15px;
+}
+
+.filters button {
+  flex: 1;
+  background: #eaeaea;
+  color: #333;
+}
+input {
+  flex: 1;
+  padding: 10px;
+  border-radius: 6px;
+}   
+
+.filters button.active {
+  background: #c2c2c2;
+  font-weight: 600;
+}
+
+.filters button:hover {
+  background: #d7d7d7;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+li {
+  background: #fafafa;
+  padding: 10px 14px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 6px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  animation: fadeInSlide 0.4s ease forwards;
+}
+
+
+li.done {
+  text-decoration: line-through;
+  color: #777;
+  background: #f0f0f0;
+}
+
+li div {
+  display: flex;
+  gap: 6px;
+}
+
+li :nth-child{
+    display: flex;
+    flex-direction: column;
+}
+
+li div button {
+  padding: 6px 10px;
+  font-size: 12px;
+  background: #e0e0e0;
+  color: #333;
+}
+
+li.done span {
+  text-decoration: line-through;
+}
+
+li div button:hover {
+  background: #cfcfcf;
+}
+
+li div button.done-btn {
+  background: #d6d6d6;
+}
+
+li div button.done-btn:hover {
+  background: #bdbdbd;
+}
+
+li div button.delete-btn {
+  background: #e0e0e0;
+}
+
+li div button.delete-btn:hover {
+  background: #c9c9c9;
+}
+
+.counter {
+  margin-top: 15px;
+  text-align: center;
+  font-weight: bold;
+}
+
+@keyframes fadeInSlide {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-out {
+  animation: fadeOut 0.3s ease forwards;
+}
+
+@keyframes fadeOut {
+  to { opacity: 0; transform: translateY(6px); height: 0; margin: 0; padding: 0; }
+}
+
+body.dark {
+  background: #1e1e1e;
+  color: #f0f0f0;
+}
+
+body.dark .container {
+  background: #2a2a2a;
+}
+
+body.dark header h1 {
+  color: #e0e0e0;
+}
+
+body.dark li {
+  background: #333;
+  color: #f0f0f0;
+}
+
+body.dark li.done {
+  background: #3b3b3b;
+  color: #aaa;
+}
+
+body.dark button {
+  background: #444;
+  color: #f0f0f0;
+}
+
+body.dark button:hover {
+  background: #555;
+}
+
+body.dark .filters button.active {
+  background: #666;
+}
