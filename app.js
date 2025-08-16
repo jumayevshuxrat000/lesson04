@@ -1,23 +1,22 @@
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", function() {
   const addBtn = document.getElementById("add-btn");
   const taskInput = document.getElementById("task-input");
   const taskList = document.getElementById("task-list");
   const darkModeToggle = document.getElementById("dark-mode-toggle");
+  const counter = document.getElementById("counter");
   let currentFilter = "all";
   let tasks = [];
 
-  // 🔹 Yuklash
   loadTasks();
   runner();
 
-  // 🔹 Vazifa qo‘shish
-  addBtn.addEventListener("click", () => {
+  addBtn.addEventListener("click", function() {
     const text = taskInput.value.trim();
     if (text) {
       tasks.push({
-        text,
+        text: text,
         done: false,
-        added: new Date().toLocaleString(),
+        added: getTime(),
         edited: null
       });
       taskInput.value = "";
@@ -25,108 +24,103 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // 🔹 Filter tugmalari
-  document.querySelectorAll(".filters button").forEach(btn => {
-    btn.addEventListener("click", () => {
-      document.querySelectorAll(".filters button").forEach(b => b.classList.remove("active"));
+  document.querySelectorAll(".filters button").forEach(function(btn) {
+    btn.addEventListener("click", function() {
+      document.querySelectorAll(".filters button").forEach(function(b) {
+        b.classList.remove("active");
+      });
       btn.classList.add("active");
       currentFilter = btn.dataset.filter;
       runner();
     });
   });
 
-  // 🔹 Dark mode
-  darkModeToggle.addEventListener("click", () => {
+  darkModeToggle.addEventListener("click", function() {
     document.body.classList.toggle("dark");
     darkModeToggle.innerHTML = document.body.classList.contains("dark")
-      ? '<i class="fa-solid fa-sun"></i> Light Mode'
-      : '<i class="fa-solid fa-moon"></i> Dark Mode';
+      ? '<i class="fa-solid fa-moon"></i> Light Mode'
+      : '<i class="fa-solid fa-sun"></i> Dark Mode';
   });
 
-  // 🔹 Runner (render)
   function runner() {
     taskList.innerHTML = "";
-    let filteredTasks = tasks.filter(task => {
+    let filteredTasks = tasks.filter(function(task) {
       if (currentFilter === "done") return task.done;
       if (currentFilter === "undone") return !task.done;
       return true;
     });
 
-    filteredTasks.forEach(task => {
+    filteredTasks.forEach(function(task, i) {
       const li = document.createElement("li");
       if (task.done) li.classList.add("done");
-
-      const originalIndex = tasks.indexOf(task);
 
       li.innerHTML = `
         <div>
           <span>${task.text}</span>
-          <small>Added: ${task.added}${task.edited ? ` | Edited: ${task.edited}` : ""}</small>
+          <p>Added: ${task.added}${task.edited ? ` | Edited: ${task.edited}` : ""}</p>
         </div>
         <div>
-          <button onclick="toggleDone(${originalIndex})"><i class="fa-solid fa-check"></i></button>
-          <button onclick="editTask(${originalIndex})"><i class="fa-solid fa-pen"></i></button>
-          <button onclick="deleteTask(${originalIndex})"><i class="fa-solid fa-trash"></i></button>
+          <button class="done-btn"><i class="fa-solid fa-check"></i></button>
+          <button class="edit-btn"><i class="fa-solid fa-pen"></i></button>
+          <button class="delete-btn"><i class="fa-solid fa-trash"></i></button>
         </div>
       `;
+
+      li.querySelector(".done-btn").onclick = function() {
+        tasks[i].done = !tasks[i].done;
+        runner();
+      };
+
+      // Edit
+      li.querySelector(".edit-btn").onclick = function() {
+        const input = document.createElement("input");
+        input.type = "text";
+        input.value = task.text;
+        input.onblur = function() {
+          const newText = input.value.trim();
+          if (newText) {
+            task.text = newText;
+            task.edited = getTime();
+          }
+          runner();
+        };
+        input.onkeypress = function(e) {
+          if (e.key === "Enter") input.blur();
+        };
+        li.querySelector("span").replaceWith(input);
+        input.focus();
+      };
+
+      li.querySelector(".delete-btn").onclick = function() {
+        tasks.splice(i, 1);
+        runner();
+      };
+
       taskList.appendChild(li);
     });
 
-    updateCounter();
+    counter();
     saveTasks();
   }
 
-  // 🔹 Toggle done
-  window.toggleDone = index => {
-    tasks[index].done = !tasks[index].done;
-    runner();
-  };
-
-  // 🔹 O‘chirish
-  window.deleteTask = index => {
-    tasks.splice(index, 1);
-    runner();
-  };
-
-  // 🔹 Tahrirlash
-  window.editTask = index => {
-    const li = taskList.children[index];
-    const task = tasks[index];
-    const input = document.createElement("input");
-    input.type = "text";
-    input.value = task.text;
-
-    input.addEventListener("blur", () => {
-      const newText = input.value.trim();
-      if (newText) {
-        task.text = newText;
-        task.edited = new Date().toLocaleString();
-      }
-      runner();
-    });
-
-    input.addEventListener("keypress", e => {
-      if (e.key === "Enter") input.blur();
-    });
-
-    li.querySelector("span").replaceWith(input);
-    input.focus();
-  };
-
-  // 🔹 Counter
-  function updateCounter() {
-    const doneCount = tasks.filter(t => t.done).length;
-    const undoneCount = tasks.filter(t => !t.done).length;
-    document.getElementById("counter").textContent =
-      `Bajarilgan: ${doneCount} ta | Bajarilmagan: ${undoneCount} ta`;
+  function counter() {
+    const doneCount = tasks.filter(function(t) { return t.done; }).length;
+    const undoneCount = tasks.length - doneCount;
+    counter.textContent = `Bajarilgan: ${doneCount} ta | Bajarilmagan: ${undoneCount} ta`;
   }
 
-  // 🔹 Saqlash
+  function getTime() {
+    const now = new Date();
+    let h = now.getHours();
+    let m = now.getMinutes();
+    if (m < 10) m = "0" + m;
+    return h + ":" + m;
+  }
+
   function saveTasks() {
     localStorage.setItem("tasks", JSON.stringify(tasks));
   }
 
-  // 🔹 Yuklash
   function loadTasks() {
     const saved = localStorage.getItem("tasks");
     if (saved) tasks = JSON.parse(saved);

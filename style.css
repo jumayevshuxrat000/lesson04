@@ -136,11 +136,16 @@ li.done {
 li div {
   display: flex;
   gap: 6px;
+  align-items: center;
 }
 
-li :nth-child{
-    display: flex;
-    flex-direction: column;
+li span{
+    margin-right: 150px;
+}
+
+li p{
+    font-size: 10px;
+    font-weight: bold;
 }
 
 li div button {
