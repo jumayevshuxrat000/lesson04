@@ -99,11 +99,11 @@ document.addEventListener("DOMContentLoaded", function() {
       taskList.appendChild(li);
     });
 
-    counter();
+    updateCounter();
     saveTasks();
   }
 
-  function counter() {
+  function updateCounter() {
     const doneCount = tasks.filter(function(t) { return t.done; }).length;
     const undoneCount = tasks.length - doneCount;
     counter.textContent = `Bajarilgan: ${doneCount} ta | Bajarilmagan: ${undoneCount} ta`;
